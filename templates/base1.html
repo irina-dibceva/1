@@ -1,40 +1,64 @@
 <!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
-    <meta name="generator" content="Jekyll v3.8.5">
-    <title>Starter Template · Bootstrap</title>
-
-    <link rel="canonical" href="https://getbootstrap.com/docs/4.3/examples/starter-template/">
-
-    <!-- Bootstrap core CSS -->
-      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+<title>Home page</title>
+<style>
+  * {
+   box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+  }
+  #main {
+    display: flex;
+    min-height: calc(100vh - 40vh);
+  }
+  #main > article {
+    flex: 1;
+  }
+  #main > nav,
+  #main > aside {
+    flex: 0 0 20vw;
+    background: beige;
+  }
+  #main > nav {
+    order: -1;
+  }
+  header, footer, article, nav, aside {
+    padding: 1em;
+  }
+  header, footer {
+    background: yellowgreen;
+    height: 20vh;
+  }
+   <!-- Bootstrap core CSS -->
+   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
             integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
             crossorigin="anonymous">
+</style>
+<body>
+<header>
+  <main role="main" class="container my-5 mx-5">
 
-    <style>
-      .bd-placeholder-img {
-        font-size: 1.125rem;
-        text-anchor: middle;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-      }
+  <div class="starter-template text-center" >
+    <h1>FIND WORK!</h1>
+    <p class="lead">
+        We like help for you!
+        <br>Ours client always have work.
+    </p>
+  </div>
 
-      @media (min-width: 768px) {
-        .bd-placeholder-img-lg {
-          font-size: 3.5rem;
-        }
-      }
-    </style>
-    <!-- Custom styles for this template -->
-    <link href="starter-template.css" rel="stylesheet">
-  </head>
-  <body>
+</main>
+</header>
+  <div id="main">
+    <article>
+      {% for job in jobs %}
+      <h4>
+        <a href="{{job.href}}">{{job.title}}</a>
+      </h4>
+      <p>{{job.descr}}</p><br/>
+      <p>{{job.company}}</p>
+      <hr><br/>
+      {% endfor %}
+    </article>
     <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
   <a class="navbar-brand" href="#">Navbar</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse"
@@ -70,29 +94,10 @@
     </form>
   </div>
 </nav>
-
-<main role="main" class="container my-5">
-
-  <div class="starter-template text-center">
-      <div class="row">
-          <div class="col">
-              {% if messages %}
-              <ul class="messages">
-                  {% for message in messages %}
-                  <li {% if message.tags %} class="{{message.tags}}"{% endif %}>
-                      {{ message }}
-                  </li>
-                  {% endfor %}
-              </ul>
-              {% endif %}
-          </div>
-      </div>
-      {% block content %} {% endblock %}
-
+    <aside>Aside</aside>
   </div>
-
-</main><!-- /.container -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+  <footer>Footer</footer>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
@@ -101,6 +106,4 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
             integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
             crossorigin="anonymous"></script>
-  </body>
-</html>
-
+</body>

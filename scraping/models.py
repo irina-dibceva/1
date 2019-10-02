@@ -38,7 +38,7 @@ class Url(models.Model):
     city = models.ForeignKey(City, on_delete=models.CASCADE, verbose_name='city')
     speciality = models.ForeignKey(Specialty, on_delete=models.CASCADE, verbose_name='speciality')
     site = models.ForeignKey(Site, on_delete=models.CASCADE, verbose_name='site')
-    url_address = models.CharField(max_length=50, verbose_name='url_address')
+    url_address = models.CharField(max_length=250, verbose_name='url_address')
 
     def __str__(self):
         return self.url_address

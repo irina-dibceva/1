@@ -1,14 +1,42 @@
+import datetime
 import time
-
 from django.db import IntegrityError
+from django.http import Http404
 from django.shortcuts import render
 from scraping.models import *
-
+from scraping.forms import FindVacancy
 from scraping.utils import *
 
 
 def home(request):
     return render(request, 'base.html')
+
+
+def list_today(request):
+    today = datetime.date.today()
+    city = City.objects.get(name='Kiev')
+    speciality = Specialty.objects.get(name='Python')
+    qs = Vacancy.objects.filter(city=city.id, speciality=speciality.id, timestamp=today)
+    if qs:
+        return render(request, 'scraping/list.html', {'jobs': qs})
+    return render(request, 'scraping/list.html')
+
+
+def list_vacancy(request):
+    today = datetime.date.today()
+    form = FindVacancy
+    if request.GET:
+        try:
+            city_id = int(request.GET.get('city'))
+            speciality_id = int(request.GET.get('speciality'))
+        except ValueError:
+            raise Http404('Page not found')
+        context = {'form': form}
+        qs = Vacancy.objects.filter(city=city_id, speciality=speciality_id, timestamp=today)
+        if qs:
+            context['jobs'] = qs
+            return render(request, 'scraping/list.html', context)
+    return render(request, 'scraping/list.html', {'form': form})
 
 
 def home_list(request):
@@ -37,4 +65,4 @@ def home_list(request):
             except IntegrityError:
                 'This vacancy is exist'
 
-    return render(request, 'base1.html', {'jobs': jobs})
+    return render(request, 'scraping/list.html', {'jobs': jobs})
