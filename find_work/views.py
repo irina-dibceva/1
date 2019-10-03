@@ -1,5 +1,7 @@
 import datetime
 import time
+
+from django.contrib import messages
 from django.db import IntegrityError
 from django.http import Http404
 from django.shortcuts import render
@@ -25,18 +27,44 @@ def list_today(request):
 def list_vacancy(request):
     today = datetime.date.today()
     form = FindVacancy
+    context = {}
     if request.GET:
-        try:
-            city_id = int(request.GET.get('city'))
-            speciality_id = int(request.GET.get('speciality'))
-        except ValueError:
-            raise Http404('Page not found')
-        context = {'form': form}
-        qs = Vacancy.objects.filter(city=city_id, speciality=speciality_id, timestamp=today)
-        if qs:
-            context['jobs'] = qs
-            return render(request, 'scraping/list.html', context)
-    return render(request, 'scraping/list.html', {'form': form})
+        form = FindVacancy(data=request.GET)
+        if form.is_valid():
+            print(form.cleaned_data)
+            messages.success(request, 'Ok, action is right')
+            qs = Vacancy.objects.filter(
+                city=form.cleaned_data['city'],
+                speciality=form.cleaned_data['speciality'],
+                timestamp=today
+            )
+            if qs:
+                context['form'] = form
+                context['jobs'] = qs
+                return render(request, 'scraping/list.html', context)
+        else:
+            print(form.errors)
+            messages.error(request, 'Please, try again')
+
+
+            #qs{**}
+    # qs = Vacancy(city=qs['city'], speciality=qs['speciality'], url_vacancy=qs['href'],
+    #              title=qs['title'], description=qs['descr'],
+    #              company=qs['company'])
+
+    return render(request, 'scraping/list.html',  {'form': form})
+            #return form
+
+
+    #context = {'form': form}
+    #qs = Vacancy.objects.filter(city=city_id, speciality=speciality_id, timestamp=today)
+        #qs = Vacancy(city=city, speciality=speciality, url_vacancy=qs['href'],
+         #            title=qs['title'], description=qs['descr'],
+          #           company=qs['company'])
+    #if qs:
+     #   context['jobs'] = qs
+      #  return render(request, 'scraping/list.html', context)
+    #return render(request, 'scraping/list.html', {'form': form})
 
 
 def home_list(request):
@@ -53,16 +81,14 @@ def home_list(request):
     jobs.extend(dou(url_d))
     jobs.extend(rabota(url_r))
     jobs.extend(work(url_w))
-    v = Vacancy.objects.filter(city=city.id, speciality=speciality.id).values('description')
-    description_list = [i['description'] for i in v]
+    vacancies = []
     for job in jobs:
-        if job['descr'] not in description_list:
-            vacancy = Vacancy(city=city, speciality=speciality, url_vacancy=job['href'],
-                              title=job['title'], description=job['descr'],
-                              company=job['company'])
-            try:
-                vacancy.save()
-            except IntegrityError:
-                'This vacancy is exist'
-
-    return render(request, 'scraping/list.html', {'jobs': jobs})
+        vacancy = Vacancy(city=city, speciality=speciality, url_vacancy=job['href'],
+                          title=job['title'], description=job['descr'],
+                          company=job['company'])
+        try:
+            vacancy.save()
+        except IntegrityError:
+            'This vacancy is exist'
+        vacancies.append(vacancy)
+    return render(request, 'scraping/list.html', {'jobs': vacancies})

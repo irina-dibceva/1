@@ -18,13 +18,15 @@ from django.contrib import admin
 
 from django.urls import path
 
-from subscribers.views import SubscriberCreate
+from subscribers.views import SubscriberCreate, login_subscriber, update_subscriber
 from .views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^home/', home_list),
-    url(r'^list/', list_vacancy),
+    path('list/', list_vacancy, name='list'),
     url(r'^create/', SubscriberCreate.as_view(), name='create'),
+    path('update/', update_subscriber),
+    path('login/', login_subscriber, name='login'),
     url(r'^', home),
 ]

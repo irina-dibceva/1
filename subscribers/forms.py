@@ -37,3 +37,20 @@ class LoginForm(forms.Form):
         return email
 
 
+class SubscriberEmailForm(forms.ModelForm):
+    email = forms.EmailField(label='e-mail', required=True,
+                             widget=forms.HiddenInput())
+    city = forms.ModelChoiceField(label='City', queryset=City.objects.all(),
+                                  widget=forms.Select(attrs={'class': 'form-control'}))
+    speciality = forms.ModelChoiceField(label='Specialty', queryset=Specialty.objects.all(),
+                                        widget=forms.Select(attrs={'class': 'form-control'}))
+    password = forms.CharField(label='password',
+                               widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+    is_active = forms.BooleanField(label='Get mail', required=False, widget=forms.CheckboxInput())
+
+    class Meta:
+        model = Subscriber
+        fields = ('email', 'city', 'speciality', 'password', 'is_active')
+
+
+
