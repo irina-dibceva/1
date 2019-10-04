@@ -1,0 +1,1 @@
+[{"model": "subscribers.subscriber", "pk": 1, "fields": {"email": "vladimirvolkov19751975@ukr.net", "city": 3, "speciality": 2, "password": "123", "is_active": true}}, {"model": "subscribers.subscriber", "pk": 2, "fields": {"email": "123@123.123", "city": 2, "speciality": 1, "password": "123", "is_active": true}}]

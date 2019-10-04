@@ -15,6 +15,7 @@ class SubscriberModelForm(forms.ModelForm):
 
     class Meta:
         model = Subscriber
+
         fields = ('email', 'city', 'speciality', 'password')
         exclude = {'is_active', }
 

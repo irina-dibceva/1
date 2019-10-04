@@ -1,9 +1,6 @@
 import datetime
-import time
-
 from django.contrib import messages
 from django.db import IntegrityError
-from django.http import Http404
 from django.shortcuts import render
 from scraping.models import *
 from scraping.forms import FindVacancy
@@ -46,25 +43,7 @@ def list_vacancy(request):
             print(form.errors)
             messages.error(request, 'Please, try again')
 
-
-            #qs{**}
-    # qs = Vacancy(city=qs['city'], speciality=qs['speciality'], url_vacancy=qs['href'],
-    #              title=qs['title'], description=qs['descr'],
-    #              company=qs['company'])
-
     return render(request, 'scraping/list.html',  {'form': form})
-            #return form
-
-
-    #context = {'form': form}
-    #qs = Vacancy.objects.filter(city=city_id, speciality=speciality_id, timestamp=today)
-        #qs = Vacancy(city=city, speciality=speciality, url_vacancy=qs['href'],
-         #            title=qs['title'], description=qs['descr'],
-          #           company=qs['company'])
-    #if qs:
-     #   context['jobs'] = qs
-      #  return render(request, 'scraping/list.html', context)
-    #return render(request, 'scraping/list.html', {'form': form})
 
 
 def home_list(request):
@@ -82,6 +61,7 @@ def home_list(request):
     jobs.extend(rabota(url_r))
     jobs.extend(work(url_w))
     vacancies = []
+
     for job in jobs:
         vacancy = Vacancy(city=city, speciality=speciality, url_vacancy=job['href'],
                           title=job['title'], description=job['descr'],

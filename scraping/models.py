@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models.indexes import Index
 
 
 class City(models.Model):
