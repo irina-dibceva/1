@@ -14,12 +14,15 @@ class SubscriberCreate(CreateView):
     success_url = reverse_lazy('create')
 
     def post(self, request, *args, **kwargs):
-        form_class = self.get_form_class()
-        form = self.get_form(form_class)
+        # form_class = self.get_form_class()
+        self.object = None
+        form = self.get_form()
         if form.is_valid():
             messages.success(request, 'Ok, action is right')
             return self.form_valid(form)
+            #return redirect('admin')
         else:
+
             messages.error(request, 'Please, try again')
             return self.form_invalid(form)
 

@@ -8,7 +8,8 @@ from scraping.utils import *
 
 
 def home(request):
-    return render(request, 'base.html')
+    form = FindVacancy
+    return render(request, 'scraping/home.html', {'form': form})
 
 
 def list_today(request):
