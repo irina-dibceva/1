@@ -1,10 +1,24 @@
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+
+from django.conf import settings
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 
 from django.views.generic import FormView, CreateView
-from .forms import SubscriberModelForm, LoginForm, SubscriberEmailForm
+from .forms import SubscriberModelForm, LoginForm, SubscriberEmailForm, ContactForm
 from .models import *
+
+
+ADMIN_EMAIL = settings.ADMIN_EMAIL
+MAILGUN_KEY = settings.MAILGUN_KEY
+API = settings.API
+MAIL_SERVER = settings.MAIL_SERVER
+PASSWORD_AWARD = settings.PASSWORD_AWARD
+USER_AWARD = settings.USER_AWARD
+FROM_EMAIL = settings.FROM_EMAIL
 
 
 class SubscriberCreate(CreateView):
@@ -64,3 +78,36 @@ def update_subscriber(request):
     else:
         return redirect('login')
 
+
+def contact_admin(request):
+    if request.method == 'POST':
+        form = ContactForm(request.POST or None)
+        if form.is_valid():
+            city = form.cleaned_data['city']
+            speciality = form.cleaned_data['speciality']
+            from_email = form.cleaned_data['email']
+            content = 'Прошу добавить в поиск : город - {}'.format(city)
+            content += ', специальность - {}'.format(speciality)
+            content += 'Запрос от пользователя  {}'.format(from_email)
+            # Subject = 'Запрос на добавление в БД'
+            msg = MIMEMultipart()
+            msg['Subject'] = 'Запрос на добавление в БД'
+            msg['From'] = '<{email}>'.format(email=FROM_EMAIL)
+            msg['To'] = ADMIN_EMAIL
+            mail = smtplib.SMTP()
+            mail.connect(MAIL_SERVER, 25)
+            mail.ehlo()
+            mail.starttls()
+            mail.login(USER_AWARD, PASSWORD_AWARD)
+            email = [ADMIN_EMAIL]
+            msg.attach(MIMEText(content))
+            mail.sendmail(FROM_EMAIL, email, msg.as_string())
+            # requests.post(API,  auth=("api", MAILGUN_KEY), data={"from": from_email, "to": ADMIN_EMAIL,
+            #                     "subject":Subject , "text": content})
+            messages.success(request, 'Ваше письмо отправленно')
+            mail.quit()
+            return redirect('index')
+        return render(request, 'subscribers/contact.html', {'form': form})
+    else:
+        form = ContactForm()
+    return render(request, 'subscribers/contact.html', {'form': form})

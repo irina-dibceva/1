@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}List for contact with admin.{% endblock %}
+{% block content %}
+<div class="row my-5">
+        <div class="col">
+            <h1 class="my-5">List for contact with admin.</h1>
+        </div>
+</div>
+
+<div class="row my-5">
+    <div class="col">
+        <form method="post" action="">{% csrf_token %}
+            {{form.as_p}}
+            <button type="submit" class="btn btn-success">Send</button>
+        </form>
+    </div>
+</div>
+
+{% endblock content %}

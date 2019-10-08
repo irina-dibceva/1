@@ -54,4 +54,16 @@ class SubscriberEmailForm(forms.ModelForm):
         fields = ('email', 'city', 'speciality', 'password', 'is_active')
 
 
+class ContactForm(forms.Form):
+    email = forms.EmailField(label='E-mail', required=True, widget=forms.EmailInput(attrs={"class": 'form-control'}))
+    city = forms.CharField(label='City', required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    speciality = forms.CharField(label='Specialty', required=True,
+                                 widget=forms.TextInput(attrs={'class': 'form-control'}))
+
+
+class TokenForm(forms.Form):
+    email = forms.EmailField(widget=forms.HiddenInput())
+    token = forms.CharField(widget=forms.HiddenInput())
+
+
 

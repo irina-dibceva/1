@@ -7,11 +7,6 @@ from scraping.forms import FindVacancy
 from scraping.utils import *
 
 
-def home(request):
-    form = FindVacancy
-    return render(request, 'scraping/home.html', {'form': form})
-
-
 def list_today(request):
     today = datetime.date.today()
     city = City.objects.get(name='Kiev')
@@ -20,31 +15,6 @@ def list_today(request):
     if qs:
         return render(request, 'scraping/list.html', {'jobs': qs})
     return render(request, 'scraping/list.html')
-
-
-def list_vacancy(request):
-    today = datetime.date.today()
-    form = FindVacancy
-    context = {}
-    if request.GET:
-        form = FindVacancy(data=request.GET)
-        if form.is_valid():
-            print(form.cleaned_data)
-            messages.success(request, 'Ok, action is right')
-            qs = Vacancy.objects.filter(
-                city=form.cleaned_data['city'],
-                speciality=form.cleaned_data['speciality'],
-                timestamp=today
-            )
-            if qs:
-                context['form'] = form
-                context['jobs'] = qs
-                return render(request, 'scraping/list.html', context)
-        else:
-            print(form.errors)
-            messages.error(request, 'Please, try again')
-
-    return render(request, 'scraping/list.html',  {'form': form})
 
 
 def home_list(request):
@@ -73,3 +43,5 @@ def home_list(request):
             'This vacancy is exist'
         vacancies.append(vacancy)
     return render(request, 'scraping/list.html', {'jobs': vacancies})
+
+

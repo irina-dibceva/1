@@ -1,16 +1,23 @@
 {% extends 'base.html' %}
+
+{% block title %} List of vacancy {% endblock %}
+
 {% block content %}
+<div class="row my-5">
+        <div class="col">
+            <h1 class="my-5">List of vacancy for today</h1>
+        </div>
+</div>
 
     <div class="row my-5">
         {% if jobs %}
+            <h2>City - {{city}}, specialty - {{speciality}}.</h2>
+            <hr>
             {% for job in jobs %}
-                <div class="col-12">
-
+                <div class="col-12 text-left">
                     <h4>
                     <a href="{{job.url_vacancy}}">{{job.title}}</a>
                     </h4>
-
-
                     <p>{{job.description}}</p><br/>
                     <p>{{job.company}}</p>
                     <hr><hr><br/>

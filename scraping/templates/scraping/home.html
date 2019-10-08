@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %} List of vacancy {% endblock %}
+
+{% block content %}
+<div class="row my-5">
+        <div class="col">
+            <h1 class="my-5">Serves for find of work</h1>
+            <p>Our serves search and analise works on other sites for you.</p>
+        </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <form method="get" action="{% url 'list' %}">
+            {{form.as_p}}
+            <button type="submit" class="btn btn-success">Search</button>
+        </form>
+    </div>
+</div>
+
+{% endblock content %}
