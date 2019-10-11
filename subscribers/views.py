@@ -8,7 +8,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 
 from django.views.generic import FormView, CreateView
-from .forms import SubscriberModelForm, LoginForm, SubscriberEmailForm, ContactForm
+from .forms import SubscriberModelForm, LoginForm, SubscriberEmailForm, ContactForm, TokenForm
 from .models import *
 
 
@@ -79,6 +79,27 @@ def update_subscriber(request):
         return redirect('login')
 
 
+def delete_subscriber(request):
+    if request.method == 'POST':
+        email = request.session.get('email')
+        user = get_object_or_404(Subscriber, email=email)
+        form = TokenForm(request.POST or None)
+        if form.is_valid():
+            form_email = form.cleaned_data['email']
+            form_token = form.cleaned_data['token']
+            token = str(user.token)
+            # assert False
+            if email == form_email and token == form_token:
+                user.delete()
+                messages.success(request, 'Данные успешно удалены.')
+                del request.session['email']
+                return redirect('home')
+        messages.error(request, 'Проверьте правильность заполнения формы')
+        return render(request, 'subscribers/update.html')
+    else:
+        return redirect('login')
+
+
 def contact_admin(request):
     if request.method == 'POST':
         form = ContactForm(request.POST or None)
@@ -89,7 +110,6 @@ def contact_admin(request):
             content = 'Прошу добавить в поиск : город - {}'.format(city)
             content += ', специальность - {}'.format(speciality)
             content += 'Запрос от пользователя  {}'.format(from_email)
-            # Subject = 'Запрос на добавление в БД'
             msg = MIMEMultipart()
             msg['Subject'] = 'Запрос на добавление в БД'
             msg['From'] = '<{email}>'.format(email=FROM_EMAIL)

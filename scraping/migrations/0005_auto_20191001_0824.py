@@ -16,4 +16,22 @@ class Migration(migrations.Migration):
             name='city',
             field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='scraping.City', verbose_name='city'),
         ),
+
+        migrations.CreateModel(
+            name='Url',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('url_address', models.CharField(max_length=250, unique=True, verbose_name='Адрес для поиска')),
+                ('city',
+                 models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='scraping.City', verbose_name='Город')),
+                ('site', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='scraping.Site',
+                                           verbose_name='Сайт для поиска')),
+                ('speciality', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='scraping.Specialty',
+                                                 verbose_name='Специальность')),
+                ],
+            options={
+                 'verbose_name_plural': 'Адресы для поиска',
+                 'verbose_name': 'Адрес для поиска',
+            },
+        ),
     ]

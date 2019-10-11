@@ -13,7 +13,7 @@ def home(request):
 
 
 def list_vacancy(request):
-    today = datetime.date.today()
+    #today = datetime.date.today()
     form = FindVacancy
     context = {}
     if request.GET:
@@ -24,13 +24,15 @@ def list_vacancy(request):
             qs = Vacancy.objects.filter(
                 city=form.cleaned_data['city'],
                 speciality=form.cleaned_data['speciality'],
-                timestamp=today
+                #timestamp=today
             )
             if qs:
                 context['form'] = form
                 context['jobs'] = qs
                 context['city'] = qs[0].city.name
                 context['speciality'] = qs[1].speciality.name
+                context['city_id'] = qs[0].city.id
+                context['speciality_id'] = qs[0].speciality.id
 
                 return render(request, 'scraping/list.html', context)
         else:

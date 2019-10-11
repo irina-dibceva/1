@@ -41,7 +41,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'd%g3@zd$t_qzj8lkjgxsmtdnypi)_%&bea=6xk7_%^4$ua$#qn'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'scraping',
     'subscribers',
+   # 'rest_framework',
 
 ]
 
@@ -65,6 +66,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -93,7 +95,6 @@ WSGI_APPLICATION = 'find_work.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-from .secret import DB_PASSWORD, DB_HOST, DB_NAME, DB_USER
 
 DATABASES = {
     'default': {
@@ -144,3 +145,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+#STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
+#STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+#import dj_database_url
+#db = dj_database_url.config()
+#DATABASES['default'].update(db)

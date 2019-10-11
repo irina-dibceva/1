@@ -43,12 +43,12 @@ except:
     logging.exception('Unable to open DB -{}'.format(today))
 else:
     cur = conn.cursor()
-    cur.execute(""" SELECT city_id, specialty_id FROM subscribers_subscriber WHERE is_active=%s;""", (True,))
+    cur.execute(""" SELECT city_id, speciality_id FROM subscribers_subscriber WHERE is_active=%s;""", (True,))
     qs = cur.fetchall()
     cur.execute(""" SELECT * FROM scraping_city;""")
     cities_qs = cur.fetchall()
     cities = {i[0]: i[1] for i in cities_qs}
-    cur.execute(""" SELECT * FROM scraping_specialty;""")
+    cur.execute(""" SELECT * FROM scraping_speciality;""")
     sp_qs = cur.fetchall()
     sp = {i[0]: i[1] for i in sp_qs}
     mis_urls = []
@@ -60,7 +60,7 @@ else:
     mail.login(USER_AWARD, PASSWORD_AWARD)
     for pair in qs:
         cur.execute("""SELECT * FROM scraping_url  WHERE city_id=%s 
-                    AND specialty_id=%s;""", (pair[0], pair[1]))
+                    AND speciality_id=%s;""", (pair[0], pair[1]))
         qs = cur.fetchall()
         if not qs:
             mis_urls.append((cities[pair[0]], sp[pair[1]]))
@@ -92,4 +92,3 @@ else:
     cur.close()
     conn.close()
     mail.quit()
-

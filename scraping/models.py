@@ -1,5 +1,8 @@
 from django.db import models
 from django.db.models.indexes import Index
+from django.contrib.postgres.fields import JSONField
+import datetime
+from datetime import datetime
 
 
 class City(models.Model):
@@ -66,6 +69,16 @@ class Vacancy(models.Model):
         verbose_name_plural = 'Vacancies'
 
 
+class Error(models.Model):
+    data = JSONField()
+    timestamp = models.DateField(auto_now_add=True)
 
+    class Meta:
+        verbose_name = 'Ошибка скрапинга'
+        verbose_name_plural = 'Ошибки скрапинга'
+        ordering = ['-timestamp']
+
+    def __str__(self):
+        return self.timestamp.auto_now_add.strftime('%Y-%m-%d')
 
 

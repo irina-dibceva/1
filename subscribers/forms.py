@@ -12,6 +12,10 @@ class SubscriberModelForm(forms.ModelForm):
                                         widget=forms.Select(attrs={'class': 'form-control'}))
     password = forms.CharField(label='password',
                                widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+    is_active = forms.BooleanField(label='''Я согласен получать рассылку 
+                                        по вакансиям, на указанный мной e-mail''',
+                                   required=True, widget=forms.CheckboxInput(
+                                    attrs={'class': 'form-check-input', 'checked': "checked"}))
 
     class Meta:
         model = Subscriber
